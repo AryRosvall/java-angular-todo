@@ -1,2 +1,14 @@
-<p>welcome {{name}}</p>
-<a routerLink="/todos">Todos</a>
+<div class="container">
+  <p>Welcome {{name}}</p>
+  <a routerLink="/todos">Todos</a>
+</div>
+
+<div class="container">
+  <button (click)="getWelcomeMessage()" class="btn btn-success">Get Welcome Message</button>
+  <h2 *ngIf="welcomeMessageFromService">Your message {{welcomeMessageFromService}}</h2>
+</div>
+
+<div class="container">
+  <button (click)="getWelcomeMessageWithParam()" class="btn btn-success">Get Welcome Message With Param</button>
+  <h2 *ngIf="welcomeMessageFromService">Your message {{welcomeMessageFromService}}</h2>
+</div>
