@@ -1,3 +1,4 @@
+import { BasicAuthenticationService } from './../service/basic-authentication.service';
 import { HardcodedAuthenticationService } from './../service/hardcoded-authentication.service';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
@@ -13,20 +14,36 @@ import { Router } from '@angular/router';
 })
 export class LoginComponent {
 
-  username='holi'
-  password='123'
-  errorMessage='Invalid Credentials'
+  username = 'holi'
+  password = '123'
+  errorMessage = 'Invalid Credentials'
   invalidLogin = false
 
-  constructor(private router: Router, public hardcodedAuthenticationService: HardcodedAuthenticationService) {}
+  constructor(private router: Router, public hardcodedAuthenticationService: HardcodedAuthenticationService, public basicAuthService: BasicAuthenticationService) { }
 
-  handleLogin(){
+  handleLogin() {
 
-    if(this.hardcodedAuthenticationService.authenticate(this.username, this.password)){
+    if (this.hardcodedAuthenticationService.authenticate(this.username, this.password)) {
       this.router.navigate(['welcome', this.username])
       this.invalidLogin = false
     } else {
       this.invalidLogin = true
     }
+  }
+
+  handleBasicAuthLogin() {
+
+    this.basicAuthService.executeAuthenticationBeanService(this.username, this.password).subscribe({
+      next: data => {
+        console.log(data)
+        this.router.navigate(['welcome', this.username])
+        this.invalidLogin = false
+      },
+      error: error => {
+        console.log(error)
+        this.invalidLogin = true
+      }
+    }
+    )
   }
 }
