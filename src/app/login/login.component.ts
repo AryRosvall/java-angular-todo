@@ -1,3 +1,4 @@
+import { JWTAuthenticationService } from './../service/jwt-authentication.service';
 import { BasicAuthenticationService } from './../service/basic-authentication.service';
 import { HardcodedAuthenticationService } from './../service/hardcoded-authentication.service';
 import { Component } from '@angular/core';
@@ -19,7 +20,9 @@ export class LoginComponent {
   errorMessage = 'Invalid Credentials'
   invalidLogin = false
 
-  constructor(private router: Router, public hardcodedAuthenticationService: HardcodedAuthenticationService, public basicAuthService: BasicAuthenticationService) { }
+  constructor(private router: Router, public hardcodedAuthenticationService: HardcodedAuthenticationService, public basicAuthService: BasicAuthenticationService,
+    public jwtAuthService: JWTAuthenticationService
+  ) { }
 
   handleLogin() {
 
@@ -45,5 +48,22 @@ export class LoginComponent {
       }
     }
     )
+  }
+
+  handleJWTAuthLogin() {
+    this.jwtAuthService.executeAuthenticationBeanService(this.username, this.password).subscribe({
+      next: data => {
+        console.log(data)
+        this.router.navigate(['welcome', this.username])
+        this.invalidLogin = false
+      },
+      error: error => {
+        console.log(error)
+        this.invalidLogin = true
+      }
+    }
+    )
+
+
   }
 }
